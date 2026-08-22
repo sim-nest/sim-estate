@@ -1,7 +1,11 @@
 (sim.estate-controller-acceptance-manifest/v1
   (case (id "controller-capability") (category "resource/controller"))
   (case (id "staged-source") (category "source/exact-clean"))
-  (case (id "readonly-observation") (category "operation/read-only"))
+  (case (id "binding-registry") (category "binding/sealed"))
+  (case (id "inventory-discovery") (category "inventory/sanitized-digest"))
+  (case (id "readonly-operation") (category "operation/read-only"))
+  (case (id "callback-reconcile") (category "callback/completion-only"))
+  (case (id "project-equivalence") (category "project/before-after"))
   (case (id "private-boundary") (category "evidence/sanitized"))
   (case (id "offline-verifier") (category "artifact/verify"))
 )
