@@ -21,8 +21,8 @@ require_path() {
 
 git_state_digest() {
   root=$1
-  head=$(git -C "$root" rev-parse HEAD)
-  index=$(git -C "$root" status --porcelain=v1 -z --untracked-files=all | sha256sum | awk '{print $1}')
+  head=$(git -c safe.directory="$root" -C "$root" rev-parse HEAD)
+  index=$(git -c safe.directory="$root" -C "$root" status --porcelain=v1 -z --untracked-files=all | sha256sum | awk '{print $1}')
   printf '%s:%s' "$head" "$index" | sha256sum | awk '{print $1}'
 }
 

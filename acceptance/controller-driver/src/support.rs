@@ -323,7 +323,14 @@ pub fn project_fingerprint(
 pub fn git_state_digest(root: &Path) -> Result<String, String> {
     let head = command_text(root, "git", &["rev-parse", "HEAD"])?;
     let status = Command::new("git")
-        .args(["status", "--porcelain=v1", "-z", "--untracked-files=all"])
+        .args([
+            "-c",
+            &format!("safe.directory={}", root.display()),
+            "status",
+            "--porcelain=v1",
+            "-z",
+            "--untracked-files=all",
+        ])
         .current_dir(root)
         .output()
         .map_err(|e| e.to_string())?;
@@ -338,8 +345,17 @@ pub fn git_state_digest(root: &Path) -> Result<String, String> {
 }
 
 fn command_text(root: &Path, program: &str, args: &[&str]) -> Result<String, String> {
+    let git_config;
+    let args = if program == "git" {
+        git_config = format!("safe.directory={}", root.display());
+        let mut combined = vec!["-c", git_config.as_str()];
+        combined.extend_from_slice(args);
+        combined
+    } else {
+        args.to_vec()
+    };
     let output = Command::new(program)
-        .args(args)
+        .args(&args)
         .current_dir(root)
         .output()
         .map_err(|e| e.to_string())?;
