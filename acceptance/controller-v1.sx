@@ -1,0 +1,7 @@
+(sim.estate-controller-acceptance-manifest/v1
+  (case (id "controller-capability") (category "resource/controller"))
+  (case (id "staged-source") (category "source/exact-clean"))
+  (case (id "readonly-observation") (category "operation/read-only"))
+  (case (id "private-boundary") (category "evidence/sanitized"))
+  (case (id "offline-verifier") (category "artifact/verify"))
+)
