@@ -8,6 +8,9 @@ The public API deliberately cannot carry commands, paths, environment bindings, 
 
 - `sim-estate-core`: portable records, provider contract, and conformance suite.
 - `sim-estate-project`: strict exposure declarations and compiler.
+- `sim-lib-estate-book`: immutable content-addressed operation history.
+- `sim-lib-estate`: guarded plan/apply/reconcile organ.
+- `sim-lib-estate-serve`: one read-only directory and typed, capability-shaped calls shared by every product surface.
 - `sim-site-estate-model`: deterministic scripted provider and fixture project.
 - `sim-site-estate-command`: pure compilation into sealed process requests.
 - `sim-site-estate-ansible`: fixed Ansible discovery and hash-chained callback evidence.

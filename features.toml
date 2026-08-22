@@ -69,6 +69,16 @@ guidance = "Plan from one discovery, review the plan ContentKey, and apply throu
 claims_anchors = ["anchor/crate/sim-lib-estate"]
 supports = ["feature/sim-estate/durable-operation-book", "feature/sim-estate/model-provider-conformance", "feature/sim-estate/ansible-provider-site"]
 
+[[feature]]
+id = "feature/sim-estate/composable-product-surface"
+title = "One projected and callable estate"
+summary = "One read-only Dir and one typed call vocabulary serve terminal, Surface, SDK, and capability-shaped automation without command injection."
+owner = "crate/sim-lib-estate-serve"
+audience = "framework"
+guidance = "Read EstateDir rows for observation and submit Call values to the organ for effects. Automated callers may apply only an exact pre-approved plan and cannot issue review evidence."
+claims_anchors = ["anchor/crate/sim-lib-estate-serve"]
+supports = ["feature/sim-estate/guarded-operation-lifecycle"]
+
 [[route]]
 id = "route/author-estate-exposure"
 task = "Author a safe estate exposure"
@@ -98,6 +108,15 @@ steps = [
   { feature = "feature/sim-estate/durable-operation-book", why = "Read the existing run and retained evidence without dispatch." },
   { feature = "feature/sim-estate/guarded-operation-lifecycle", why = "Close, renew, release, or retain quarantine from observed artifacts; a mutation needs a new reviewed plan." },
   { feature = "feature/sim-estate/model-provider-conformance", why = "Prove unknown-after-dispatch and reviewed resolution before using a physical site." },
+]
+
+[[route]]
+id = "route/expose-estate-product"
+task = "Expose estate behavior through terminal, Surface, SDK, or agent tools"
+audience = "application"
+steps = [
+  { feature = "feature/sim-estate/composable-product-surface", why = "Use the shared projection and exact capability-shaped calls." },
+  { feature = "feature/sim-estate/guarded-operation-lifecycle", why = "All effects converge on the guarded organ and durable book." },
 ]
 
 [enforcement.audience]
