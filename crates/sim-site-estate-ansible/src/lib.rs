@@ -29,10 +29,17 @@ pub struct AnsibleBindings {
     pub inventory_program: ProgramRef,
     pub config_program: ProgramRef,
     pub make_program: ProgramRef,
+    pub operations: BTreeMap<Symbol, OperationBinding>,
+    pub base_environment: BTreeMap<String, BindingValue>,
     pub callback_plugin: PrivateArtifactRef,
     pub event_output: PrivateArtifactRef,
     pub human_output: PrivateArtifactRef,
     pub timeout_ms: u64,
+}
+#[derive(Clone, Debug)]
+pub struct OperationBinding {
+    pub make_target: String,
+    pub target_assignment: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -44,12 +51,19 @@ struct InventoryGroup {
 }
 
 pub fn decode_inventory(input: &[u8]) -> Result<SanitizedInventory, EstateError> {
+    decode_inventory_with_targets(input).map(|(inventory, _)| inventory)
+}
+
+fn decode_inventory_with_targets(
+    input: &[u8],
+) -> Result<(SanitizedInventory, BTreeMap<Symbol, String>), EstateError> {
     if input.len() > MAX_INVENTORY_BYTES {
         return Err(bound("inventory"));
     }
     let root: serde_json::Map<String, serde_json::Value> =
         serde_json::from_slice(input).map_err(|_| EstateError::MalformedEvent)?;
     let mut targets = BTreeSet::new();
+    let mut raw_targets = BTreeMap::new();
     let mut memberships: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
     for (group, value) in root {
         if group == "_meta" {
@@ -61,6 +75,7 @@ pub fn decode_inventory(input: &[u8]) -> Result<SanitizedInventory, EstateError>
         for host in parsed.hosts {
             let host_id = opaque("host", &host);
             targets.insert(host_id.clone());
+            raw_targets.insert(Symbol::new(host_id.clone())?, host);
             memberships
                 .entry(host_id)
                 .or_default()
@@ -100,11 +115,14 @@ pub fn decode_inventory(input: &[u8]) -> Result<SanitizedInventory, EstateError>
         Sha256::digest(serde_json::to_vec(&targets).map_err(|_| EstateError::MalformedEvent)?);
     let mut revision_bytes = [0_u8; 8];
     revision_bytes.copy_from_slice(&digest[..8]);
-    Ok(SanitizedInventory {
-        version: SCHEMA_VERSION,
-        revision: u64::from_be_bytes(revision_bytes),
-        targets,
-    })
+    Ok((
+        SanitizedInventory {
+            version: SCHEMA_VERSION,
+            revision: u64::from_be_bytes(revision_bytes),
+            targets,
+        },
+        raw_targets,
+    ))
 }
 
 fn opaque(namespace: &str, value: &str) -> String {
@@ -129,6 +147,7 @@ pub struct AnsibleSite<'a> {
     artifacts: &'a dyn PrivateArtifacts,
     bindings: AnsibleBindings,
     inventory: Option<SanitizedInventory>,
+    target_bindings: BTreeMap<Symbol, String>,
     plans: BTreeMap<Symbol, Plan>,
     runs: BTreeMap<Symbol, Symbol>,
     dispatches: u64,
@@ -145,6 +164,7 @@ impl<'a> AnsibleSite<'a> {
             artifacts,
             bindings,
             inventory: None,
+            target_bindings: BTreeMap::new(),
             plans: BTreeMap::new(),
             runs: BTreeMap::new(),
             dispatches: 0,
@@ -163,13 +183,13 @@ impl<'a> AnsibleSite<'a> {
             complete,
         )
     }
-    fn operation_request(
+    fn callback_environment(
         &self,
-        target: &str,
         run: &Symbol,
         plan: &Symbol,
-    ) -> Result<ProcessRequest, EstateError> {
-        let environment = SealedBindings::try_from_entries([
+    ) -> Result<SealedBindings, EstateError> {
+        let mut entries = self.bindings.base_environment.clone();
+        entries.extend([
             (
                 "ANSIBLE_CALLBACK_PLUGINS".into(),
                 BindingValue::PrivateArtifact(self.bindings.callback_plugin.clone()),
@@ -198,18 +218,43 @@ impl<'a> AnsibleSite<'a> {
                 "SIM_ESTATE_EVENTS".into(),
                 BindingValue::PrivateArtifact(self.bindings.event_output.clone()),
             ),
-        ])
-        .map_err(|_| EstateError::MalformedEvent)?;
+        ]);
+        SealedBindings::try_from_entries(entries).map_err(|_| EstateError::MalformedEvent)
+    }
+
+    fn private_artifacts(&self) -> Vec<PrivateArtifactRef> {
+        let mut values = vec![
+            self.bindings.callback_plugin.clone(),
+            self.bindings.event_output.clone(),
+            self.bindings.human_output.clone(),
+        ];
+        values.extend(
+            self.bindings
+                .base_environment
+                .values()
+                .filter_map(|value| match value {
+                    BindingValue::PrivateArtifact(v) => Some(v.clone()),
+                    _ => None,
+                }),
+        );
+        values
+    }
+
+    fn operation_request(
+        &self,
+        argv: Vec<String>,
+        run: &Symbol,
+        plan: &Symbol,
+    ) -> Result<ProcessRequest, EstateError> {
         Ok(ProcessRequest {
             program: self.bindings.make_program.clone(),
-            argv: vec![ArgAtom::new(target).map_err(|_| EstateError::InvalidSymbol)?],
+            argv: argv
+                .into_iter()
+                .map(|value| ArgAtom::new(value).map_err(|_| EstateError::InvalidSymbol))
+                .collect::<Result<_, _>>()?,
             root: self.bindings.root.clone(),
-            environment,
-            private_artifacts: vec![
-                self.bindings.callback_plugin.clone(),
-                self.bindings.event_output.clone(),
-                self.bindings.human_output.clone(),
-            ],
+            environment: self.callback_environment(run, plan)?,
+            private_artifacts: self.private_artifacts(),
             budget: ProcessBudget {
                 timeout_ms: self.bindings.timeout_ms,
                 max_output_bytes: 65_536,
@@ -219,7 +264,7 @@ impl<'a> AnsibleSite<'a> {
     }
 
     fn verify_effective_config(&mut self, run: &Symbol, plan: &Symbol) -> Result<(), EstateError> {
-        let operation = self.operation_request("perform", run, plan)?;
+        let operation = self.operation_request(vec!["perform".into()], run, plan)?;
         let request = ProcessRequest {
             program: self.bindings.config_program.clone(),
             argv: ["dump", "--only-changed", "--format", "json"]
@@ -251,13 +296,11 @@ impl<'a> AnsibleSite<'a> {
             "DEFAULT_LOAD_CALLBACK_PLUGINS",
             "SHOW_PER_HOST_START",
         ];
-        if rows.len() != required.len()
-            || required.iter().any(|name| {
-                !rows
-                    .iter()
-                    .any(|row| row.name == *name && row.source == "env")
-            })
-        {
+        if required.iter().any(|name| {
+            !rows
+                .iter()
+                .any(|row| row.name == *name && row.source == "env")
+        }) {
             return Err(EstateError::MalformedEvent);
         }
         Ok(())
@@ -280,8 +323,9 @@ impl EstateProvider for AnsibleSite<'_> {
                 .map(|v| ArgAtom::new(v).expect("literal"))
                 .collect(),
             root: self.bindings.root.clone(),
-            environment: SealedBindings::empty(),
-            private_artifacts: vec![self.bindings.human_output.clone()],
+            environment: SealedBindings::try_from_entries(self.bindings.base_environment.clone())
+                .map_err(|_| EstateError::MalformedEvent)?,
+            private_artifacts: self.private_artifacts(),
             budget: ProcessBudget {
                 timeout_ms: self.bindings.timeout_ms,
                 max_output_bytes: MAX_INVENTORY_BYTES,
@@ -297,8 +341,9 @@ impl EstateProvider for AnsibleSite<'_> {
         if receipt.result.truncated || receipt.result.exit_code != 0 {
             return Err(EstateError::MalformedEvent);
         }
-        let inventory = decode_inventory(receipt.result.stdout.as_bytes())?;
+        let (inventory, targets) = decode_inventory_with_targets(receipt.result.stdout.as_bytes())?;
         self.inventory = Some(inventory.clone());
+        self.target_bindings = targets;
         Ok((
             ProviderCard {
                 version: 1,
@@ -359,14 +404,20 @@ impl EstateProvider for AnsibleSite<'_> {
             &hex(&Sha256::digest(plan.id.as_str()))[..24]
         ))?;
         self.verify_effective_config(&run_id, &plan.id)?;
-        let target = if plan.operation.exposure.as_str().ends_with("/verify") {
-            "verify"
-        } else if plan.operation.exposure.as_str().ends_with("/preview") {
-            "preview"
-        } else {
-            "perform"
-        };
-        let request = self.operation_request(target, &run_id, &plan.id)?;
+        let binding = self
+            .bindings
+            .operations
+            .get(&plan.operation.exposure)
+            .ok_or_else(|| EstateError::Unsupported(plan.operation.exposure.clone()))?;
+        let mut argv = vec![binding.make_target.clone()];
+        if let Some(name) = &binding.target_assignment {
+            let raw = self
+                .target_bindings
+                .get(&plan.operation.target)
+                .ok_or(EstateError::TargetDisappeared)?;
+            argv.push(format!("{name}={raw}"));
+        }
+        let request = self.operation_request(argv, &run_id, &plan.id)?;
         self.dispatches += 1;
         let attempt = self.port.run(&request, &ProcessCancellation::default());
         if matches!(attempt, ProcessAttempt::NotDispatched { .. }) {

@@ -1,0 +1,21 @@
+[package]
+name = "sim-estate-acceptance"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+serde = { workspace = true }
+serde_json.workspace = true
+sha2.workspace = true
+sim-estate-core = { path = "../../crates/sim-estate-core" }
+sim-lib-estate = { path = "../../crates/sim-lib-estate" }
+sim-lib-estate-book = { path = "../../crates/sim-lib-estate-book" }
+sim-lib-estate-serve = { path = "../../crates/sim-lib-estate-serve" }
+sim-lib-exec.workspace = true
+sim-site-estate-ansible = { path = "../../crates/sim-site-estate-ansible" }
+sim-site-estate-command = { path = "../../crates/sim-site-estate-command" }
+sim-site-estate-model = { path = "../../crates/sim-site-estate-model" }
+
+[lints]
+workspace = true

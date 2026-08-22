@@ -19,7 +19,7 @@ pub enum Row {
     },
     Plan {
         key: Key,
-        plan: ImmutablePlan,
+        plan: Box<ImmutablePlan>,
     },
     Approval {
         id: String,

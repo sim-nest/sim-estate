@@ -41,6 +41,15 @@ fn bindings() -> AnsibleBindings {
         inventory_program: ProgramRef::new("program/ansible-inventory").unwrap(),
         config_program: ProgramRef::new("program/ansible-config").unwrap(),
         make_program: ProgramRef::new("program/make").unwrap(),
+        operations: [(
+            sym("deploy/perform"),
+            OperationBinding {
+                make_target: "perform".into(),
+                target_assignment: None,
+            },
+        )]
+        .into(),
+        base_environment: BTreeMap::new(),
         callback_plugin: PrivateArtifactRef::new("artifact/callback").unwrap(),
         event_output: PrivateArtifactRef::new("artifact/events").unwrap(),
         human_output: PrivateArtifactRef::new("artifact/human").unwrap(),

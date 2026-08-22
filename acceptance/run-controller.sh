@@ -10,29 +10,6 @@ usage() {
   exit 2
 }
 
-sha256_file() {
-  sha256sum "$1" | awk '{print $1}'
-}
-
-sha256_text() {
-  printf '%s' "$1" | sha256sum | awk '{print $1}'
-}
-
-field() {
-  name=$1
-  value=$2
-  case "$value" in
-    *\"* | *\\*) echo "field contains an unsafe character" >&2; exit 1 ;;
-  esac
-  printf '  (%s "%s")\n' "$name" "$value"
-}
-
-case_line() {
-  id=$1
-  category=$2
-  printf '    (case (id "%s") (category "%s") (passed true))\n' "$id" "$category"
-}
-
 require_path() {
   value=$1
   label=$2
@@ -91,22 +68,6 @@ print(hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).
 PY
 }
 
-write_event_book() {
-  path=$1
-  source=$2
-  operation=$3
-  result=$4
-  {
-    echo "(sim.estate-controller-events/v1"
-    field source "$source"
-    field operation "$operation"
-    field accepted "true"
-    field final "$result"
-    field raw_output_retained "false"
-    echo ")"
-  } >"$path"
-}
-
 assert_source() {
   case "$1" in
     *[!0-9a-f]* | "" ) echo "source must be a lowercase hex commit" >&2; exit 1 ;;
@@ -127,16 +88,20 @@ verify() {
   grep -Fq '  (target "control-local")' "$artifact"
   grep -Fq '  (controller_capsule "physical-readonly")' "$artifact"
   grep -Fq '  (operation "estate/ping")' "$artifact"
+  grep -Fq '  (delivered_vertical "provider-organ-book-table-cli")' "$artifact"
+  grep -Fq '  (process_service "ProcessPort")' "$artifact"
+  grep -Fq '  (storage_service "Table")' "$artifact"
+  grep -Fq '  (clock_timer_service "bounded-runner")' "$artifact"
   grep -Fq '  (private_boundary "host-blind")' "$artifact"
   grep -Fq '  (artifact_retention "sanitized-only")' "$artifact"
   grep -Fq '  (network "lan-bounded")' "$artifact"
   grep -Fq '  (project_unchanged "true")' "$artifact"
   grep -Fq '  (callback_final "succeeded")' "$artifact"
   grep -Fq '  (result "physical-controller-readonly-pass")' "$artifact"
-  for required in controller-capability staged-source binding-registry inventory-discovery readonly-operation callback-reconcile project-equivalence private-boundary offline-verifier; do
+  for required in controller-capability fixed-inventory delivered-provider organ-apply process-attempt durable-book table-projection cli-output refusal controller-loss project-equivalence private-boundary offline-verifier; do
     grep -Fq "(case (id \"$required\")" "$artifact"
   done
-  for digest_field in manifest_sha256 harness_sha256 binding_summary_sha256 inventory_sha256 operation_output_sha256 event_book_sha256 project_before_sha256 project_after_sha256 target_set_sha256; do
+  for digest_field in manifest_sha256 harness_sha256 binding_summary_sha256 inventory_sha256 operation_binding_sha256 callback_events_sha256 process_attempts_sha256 project_before_sha256 project_after_sha256 target_set_sha256 book_projection_sha256 table_projection_sha256 cli_output_sha256 model_refusal_sha256 model_controller_loss_sha256; do
     line=$(sed -n "s/^  ($digest_field \"\\([0-9a-f][0-9a-f]*\\)\")$/\\1/p" "$artifact")
     test "${#line}" -eq 64 || {
       echo "artifact has invalid $digest_field" >&2
@@ -183,59 +148,21 @@ capture() {
   tmp="${output}.tmp.$$"
   before=$(git_state_digest "$private_root")
   binding_digest=$(binding_summary "$binding_registry")
-  inventory_raw="$work/inventory.json"
-  operation_stdout="$work/operation.stdout"
-  operation_stderr="$work/operation.stderr"
-  event_book="$work/events.sx"
-  (
-    cd "$private_root"
-    ANSIBLE_RETRY_FILES_ENABLED=False \
-      ANSIBLE_LOCAL_TEMP="$work/local-tmp" \
-      ansible-inventory --list >"$inventory_raw"
-  )
-  ANSIBLE_RETRY_FILES_ENABLED=False \
-    ANSIBLE_LOCAL_TEMP="$work/local-tmp" \
-    make -C "$private_root" ping LIMIT="$observe_limit" >"$operation_stdout" 2>"$operation_stderr"
+  CARGO_NET_OFFLINE="${CARGO_NET_OFFLINE:-true}" \
+    cargo run -p sim-estate-acceptance -- \
+      --source "$source" \
+      --private-root "$private_root" \
+      --binding-summary-sha256 "$binding_digest" \
+      --observe-target "$observe_limit" \
+      --operation estate/ping \
+      --make-target ping \
+      --work-dir "$work" \
+      --output "$tmp"
   after=$(git_state_digest "$private_root")
   test "$before" = "$after" || {
     echo "private project changed during read-only observation" >&2
     exit 1
   }
-  write_event_book "$event_book" "$source" "estate/ping" "succeeded"
-  {
-    echo "($schema"
-    field source "$source"
-    field target "control-local"
-    field controller_capsule "physical-readonly"
-    field operation "estate/ping"
-    field private_boundary "host-blind"
-    field artifact_retention "sanitized-only"
-    field network "lan-bounded"
-    field manifest_sha256 "$(sha256_file "$manifest")"
-    field harness_sha256 "$(sha256_file "$harness")"
-    field binding_summary_sha256 "$binding_digest"
-    field inventory_sha256 "$(sha256_file "$inventory_raw")"
-    field operation_output_sha256 "$(cat "$operation_stdout" "$operation_stderr" | sha256sum | awk '{print $1}')"
-    field event_book_sha256 "$(sha256_file "$event_book")"
-    field project_before_sha256 "$before"
-    field project_after_sha256 "$after"
-    field target_set_sha256 "$(sha256_text "$observe_limit")"
-    field project_unchanged "true"
-    field callback_final "succeeded"
-    echo "  (cases"
-    case_line controller-capability resource/controller
-    case_line staged-source source/exact-clean
-    case_line binding-registry binding/sealed
-    case_line inventory-discovery inventory/sanitized-digest
-    case_line readonly-operation operation/read-only
-    case_line callback-reconcile callback/completion-only
-    case_line project-equivalence project/before-after
-    case_line private-boundary evidence/sanitized
-    case_line offline-verifier artifact/verify
-    echo "  )"
-    field result physical-controller-readonly-pass
-    echo ")"
-  } >"$tmp"
   verify "$source" "$tmp"
   mv "$tmp" "$output"
 }
