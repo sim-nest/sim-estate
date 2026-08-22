@@ -1,0 +1,52 @@
+schema = "sim.features"
+
+[[feature]]
+id = "feature/sim-estate/estate-vocabulary"
+title = "Portable estate operation vocabulary"
+summary = "Versioned, bounded records and a provider contract cover estate planning through reconciliation without native identities."
+owner = "crate/sim-estate-core"
+audiences = ["code", "framework"]
+guidance = "Use EstateProvider with typed targets and sanitized inventory. Preserve Plan fingerprints through approval and reconcile every post-dispatch ambiguity; provider-private text never enters these records."
+claims_anchors = ["anchor/crate/sim-estate-core"]
+
+[[feature]]
+id = "feature/sim-estate/exposure-authoring"
+title = "Closed estate exposure authoring"
+summary = "Compile strict declarations into operations whose callers can supply only shaped parameter values."
+owner = "crate/sim-estate-project"
+audiences = ["code", "framework"]
+guidance = "Declare literal program references, whole argument templates, encoders, bounds, risk, preview, verification, and callback policy in reviewed project data. Reject unknown fields and duplicate ids before admitting any caller input."
+claims_anchors = ["anchor/crate/sim-estate-project"]
+supports = ["feature/sim-estate/estate-vocabulary"]
+
+[[feature]]
+id = "feature/sim-estate/model-provider-conformance"
+title = "Deterministic estate provider conformance"
+summary = "Exercise the shared provider suite against a clocked scripted model with every dispatch and verification fault."
+owner = "crate/sim-site-estate-model"
+audiences = ["code", "framework"]
+guidance = "Use ModelEstate for lifecycle, race, cancellation, malformed-event, and reconciliation tests. It is host-free and must never acquire a process port."
+claims_anchors = ["anchor/crate/sim-site-estate-model"]
+supports = ["feature/sim-estate/estate-vocabulary"]
+
+[[route]]
+id = "route/author-estate-exposure"
+task = "Author a safe estate exposure"
+audiences = ["code", "framework"]
+steps = [
+  { feature = "feature/sim-estate/exposure-authoring", why = "The closed compiler admits only reviewed templates and shaped values." },
+  { feature = "feature/sim-estate/model-provider-conformance", why = "The deterministic provider proves lifecycle behavior before physical placement." },
+]
+
+[enforcement.audience]
+user = "strict"
+framework = "strict"
+code = "strict"
+[enforcement.specimen]
+user = "strict"
+framework = "strict"
+code = "strict"
+[enforcement.route]
+major_entrypoints = "strict"
+frameworks = "strict"
+

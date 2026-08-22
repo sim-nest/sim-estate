@@ -1,0 +1,4 @@
+id = "model-rollout"
+title = "Plan and reconcile a modeled rollout"
+entrypoint = "main.siml"
+

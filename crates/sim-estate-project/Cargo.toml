@@ -1,0 +1,19 @@
+[package]
+name = "sim-estate-project"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Pure closed exposure compiler for SIM estate operations."
+repository = "https://github.com/sim-nest/sim-estate"
+readme = "README.md"
+publish = false
+sim-pure = true
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
+[lints]
+workspace = true
+
