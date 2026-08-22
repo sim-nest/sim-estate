@@ -171,6 +171,39 @@ impl Catalog {
             mode: definition.mode.clone(),
         })
     }
+    #[must_use]
+    pub fn exposure(&self, id: &Symbol) -> Option<&Exposure> {
+        self.exposures.get(id)
+    }
+
+    pub fn render_arguments(&self, operation: &Operation) -> Result<Vec<String>, CompileError> {
+        let exposure = self
+            .exposures
+            .get(&operation.exposure)
+            .ok_or_else(|| CompileError::UnknownExposure(operation.exposure.clone()))?;
+        let mut rendered = Vec::new();
+        for template in &exposure.arguments {
+            rendered.push(template.literal.clone());
+            if let Some(id) = &template.parameter {
+                let value = operation
+                    .parameters
+                    .get(id)
+                    .ok_or_else(|| CompileError::Shape(id.clone()))?;
+                render_value(value, &mut rendered);
+            }
+        }
+        Ok(rendered)
+    }
+}
+
+fn render_value(value: &Value, output: &mut Vec<String>) {
+    match value {
+        Value::Bool(value) => output.push(value.to_string()),
+        Value::Integer(value) => output.push(value.to_string()),
+        Value::Text(value) => output.push(value.clone()),
+        Value::Symbol(value) => output.push(value.as_str().to_owned()),
+        Value::List(values) => values.iter().for_each(|value| render_value(value, output)),
+    }
 }
 
 fn validate_exposure(value: &Exposure) -> Result<(), CompileError> {

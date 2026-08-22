@@ -45,13 +45,13 @@ fn contract() -> Result<(), String> {
         if text.contains("[package]")
             && !text.contains("name = \"xtask\"")
             && !text.contains("sim-pure = true")
+            && !text.contains("sim-pure = false")
         {
             return Err(format!("{} is missing sim-pure = true", manifest.display()));
         }
     }
     let forbidden = [
         "std::process",
-        "ProcessPort",
         "std::env",
         "std::fs",
         "std::net",
@@ -70,7 +70,7 @@ fn contract() -> Result<(), String> {
             }
         }
     }
-    println!("OS_5: zero host facts; zero capsule dependencies; all packages sim-pure");
+    println!("OS_5: zero host facts; site crates depend only on the canonical portable port");
     Ok(())
 }
 

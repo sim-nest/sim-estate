@@ -1,0 +1,6 @@
+(estate/watch-reconcile
+  :exposure 'deploy/perform
+  :target 'host/fixture
+  :after-dispatch 'kill-controller
+  :evidence 'private/events
+  :redispatch false)

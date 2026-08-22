@@ -1,0 +1,7 @@
+---
+- hosts: fixture
+  gather_facts: false
+  tasks:
+    - name: Fixture verification
+      ansible.builtin.assert:
+        that: true

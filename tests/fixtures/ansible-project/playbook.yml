@@ -1,0 +1,7 @@
+---
+- hosts: fixture
+  gather_facts: false
+  tasks:
+    - name: Fixture mutation
+      ansible.builtin.debug:
+        msg: fixed

@@ -1,0 +1,22 @@
+[package]
+name = "sim-site-estate-ansible"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Sealed Ansible provider site for SIM estate."
+repository.workspace = true
+homepage.workspace = true
+publish = false
+sim-pure = false
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
+sim-estate-project = { version = "0.1.0", path = "../sim-estate-project" }
+sim-lib-exec.workspace = true
+
+[lints]
+workspace = true

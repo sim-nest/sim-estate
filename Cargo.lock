@@ -119,7 +119,7 @@ checksum = "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn",
+ "syn 3.0.3",
 ]
 
 [[package]]
@@ -147,13 +147,38 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim-config"
+version = "0.1.4"
+dependencies = [
+ "sim-kernel",
+ "sim-table-core",
+ "sim-value",
+]
+
+[[package]]
+name = "sim-cookbook"
+version = "0.2.1"
+dependencies = [
+ "sim-config",
+ "sim-kernel",
+ "sim-value",
+]
+
+[[package]]
+name = "sim-cookbook-build"
+version = "0.1.0"
+dependencies = [
+ "sim-cookbook",
+]
+
+[[package]]
 name = "sim-estate-core"
 version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
  "sha2",
- "thiserror",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -164,7 +189,47 @@ dependencies = [
  "serde_json",
  "sha2",
  "sim-estate-core",
- "thiserror",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "sim-kernel"
+version = "0.2.1"
+dependencies = [
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "sim-lib-exec"
+version = "0.2.0"
+dependencies = [
+ "sim-cookbook",
+ "sim-cookbook-build",
+ "sim-kernel",
+]
+
+[[package]]
+name = "sim-site-estate-ansible"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "sim-estate-core",
+ "sim-estate-project",
+ "sim-lib-exec",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "sim-site-estate-command"
+version = "0.1.0"
+dependencies = [
+ "sha2",
+ "sim-estate-core",
+ "sim-estate-project",
+ "sim-lib-exec",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -173,6 +238,32 @@ version = "0.1.0"
 dependencies = [
  "sim-estate-core",
  "sim-estate-project",
+]
+
+[[package]]
+name = "sim-table-core"
+version = "0.1.4"
+dependencies = [
+ "sim-kernel",
+ "sim-value",
+]
+
+[[package]]
+name = "sim-value"
+version = "0.2.0"
+dependencies = [
+ "sim-kernel",
+]
+
+[[package]]
+name = "syn"
+version = "2.0.119"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "872831b642d1a07999a962a351ed35b955ea2cfc8f3862091e2a240a84f17297"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
 ]
 
 [[package]]
@@ -188,11 +279,31 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6aaf5339b578ea85b50e080feb250a3e8ae8cfcdff9a461c9ec2904bc923f52"
+dependencies = [
+ "thiserror-impl 1.0.69",
+]
+
+[[package]]
+name = "thiserror"
 version = "2.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec86235f5fcc2a73650310756d2ac5b138a5780bbbdfae3eeccec992c435ba4f"
 dependencies = [
- "thiserror-impl",
+ "thiserror-impl 2.0.20",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
 ]
 
 [[package]]
@@ -203,7 +314,7 @@ checksum = "bc04cd3e1236dd4a98afca4569f2deb3f120e5422a4023be2cb683f8486292af"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn",
+ "syn 3.0.3",
 ]
 
 [[package]]

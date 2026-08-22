@@ -29,6 +29,26 @@ guidance = "Use ModelEstate for lifecycle, race, cancellation, malformed-event, 
 claims_anchors = ["anchor/crate/sim-site-estate-model"]
 supports = ["feature/sim-estate/estate-vocabulary"]
 
+[[feature]]
+id = "feature/sim-estate/sealed-command-site"
+title = "Sealed command estate site"
+summary = "Compose closed exposure operations with the canonical ProcessPort using only bound programs, roots, whole atoms, and explicit budgets."
+owner = "crate/sim-site-estate-command"
+audiences = ["code", "framework"]
+guidance = "Use this adapter when a reviewed exposure maps directly to a sealed command. Fingerprint HEAD, tracked changes, relevant untracked inputs, effective configuration, and the exposure before approval."
+claims_anchors = ["anchor/crate/sim-site-estate-command"]
+supports = ["feature/sim-estate/exposure-authoring"]
+
+[[feature]]
+id = "feature/sim-estate/ansible-provider-site"
+title = "Sealed Ansible estate provider"
+summary = "Decorate ProcessPort with fixed inventory discovery, literal Make operations, an injected aggregate callback, and hash-chained private evidence."
+owner = "crate/sim-site-estate-ansible"
+audiences = ["code", "framework"]
+guidance = "Use sanitized inventory identities and reconcile from the callback artifact after controller loss. Never decode human output or expose Ansible command, path, environment, hostvars, or result payloads."
+claims_anchors = ["anchor/crate/sim-site-estate-ansible"]
+supports = ["feature/sim-estate/sealed-command-site"]
+
 [[route]]
 id = "route/author-estate-exposure"
 task = "Author a safe estate exposure"
@@ -36,6 +56,8 @@ audiences = ["code", "framework"]
 steps = [
   { feature = "feature/sim-estate/exposure-authoring", why = "The closed compiler admits only reviewed templates and shaped values." },
   { feature = "feature/sim-estate/model-provider-conformance", why = "The deterministic provider proves lifecycle behavior before physical placement." },
+  { feature = "feature/sim-estate/sealed-command-site", why = "The command site preserves the closed declaration at the process boundary." },
+  { feature = "feature/sim-estate/ansible-provider-site", why = "The Ansible decoration adds sanitized discovery and durable typed callback evidence." },
 ]
 
 [enforcement.audience]
@@ -49,4 +71,3 @@ code = "strict"
 [enforcement.route]
 major_entrypoints = "strict"
 frameworks = "strict"
-

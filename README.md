@@ -9,6 +9,7 @@ The public API deliberately cannot carry commands, paths, environment bindings, 
 - `sim-estate-core`: portable records, provider contract, and conformance suite.
 - `sim-estate-project`: strict exposure declarations and compiler.
 - `sim-site-estate-model`: deterministic scripted provider and fixture project.
+- `sim-site-estate-command`: pure compilation into sealed process requests.
+- `sim-site-estate-ansible`: fixed Ansible discovery and hash-chained callback evidence.
 
 Run `cargo run -p xtask -- check` for the full repository contract.
-
