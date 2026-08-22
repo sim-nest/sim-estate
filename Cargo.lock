@@ -209,6 +209,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "sim-lib-estate"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "sim-estate-core",
+ "sim-lib-estate-book",
+ "sim-site-estate-model",
+ "thiserror 2.0.20",
+]
+
+[[package]]
+name = "sim-lib-estate-book"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "sim-site-estate-ansible"
 version = "0.1.0"
 dependencies = [

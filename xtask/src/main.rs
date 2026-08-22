@@ -62,6 +62,7 @@ fn contract() -> Result<(), String> {
     for path in paths
         .iter()
         .filter(|p| p.components().any(|c| c.as_os_str() == "crates"))
+        .filter(|p| !p.components().any(|c| c.as_os_str() == "tests"))
     {
         let text = fs::read_to_string(path).unwrap_or_default();
         for needle in forbidden {

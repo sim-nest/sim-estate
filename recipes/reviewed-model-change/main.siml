@@ -1,0 +1,1 @@
+(estate/apply :provider 'model :approval 'reviewed/once :target 'fleet/web)

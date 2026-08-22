@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/sim-estate-core", "crates/sim-estate-project", "crates/sim-site-estate-model", "crates/sim-site-estate-command", "crates/sim-site-estate-ansible", "xtask"]
+members = ["crates/sim-estate-core", "crates/sim-estate-project", "crates/sim-lib-estate-book", "crates/sim-lib-estate", "crates/sim-site-estate-model", "crates/sim-site-estate-command", "crates/sim-site-estate-ansible", "xtask"]
 
 [workspace.package]
 edition = "2024"

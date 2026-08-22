@@ -49,6 +49,26 @@ guidance = "Use sanitized inventory identities and reconcile from the callback a
 claims_anchors = ["anchor/crate/sim-site-estate-ansible"]
 supports = ["feature/sim-estate/sealed-command-site"]
 
+[[feature]]
+id = "feature/sim-estate/durable-operation-book"
+title = "CAS-backed estate operation history"
+summary = "Store immutable plans and event envelopes before atomically advancing linked run heads, with projections rebuilt solely from durable history."
+owner = "crate/sim-lib-estate-book"
+audiences = ["code", "framework"]
+guidance = "Use Book over the platform Table/Dir implementation. Treat head conflicts and approval-use conflicts as observed refusals; never overwrite or infer an outcome from a missing event."
+claims_anchors = ["anchor/crate/sim-lib-estate-book"]
+supports = ["feature/sim-estate/estate-vocabulary"]
+
+[[feature]]
+id = "feature/sim-estate/guarded-operation-lifecycle"
+title = "Guarded estate plan, apply, and reconcile"
+summary = "Compose content-bound plans, reviewed single-use approvals, canonical leases, ledgered provider effects, typed verification, and durable quarantine."
+owner = "crate/sim-lib-estate"
+audiences = ["code", "framework"]
+guidance = "Plan from one discovery, review the plan ContentKey, and apply through EffectGate. Reconcile reads the book and private artifacts but cannot perform; quarantine requires an explicit reviewed resolution."
+claims_anchors = ["anchor/crate/sim-lib-estate"]
+supports = ["feature/sim-estate/durable-operation-book", "feature/sim-estate/model-provider-conformance", "feature/sim-estate/ansible-provider-site"]
+
 [[route]]
 id = "route/author-estate-exposure"
 task = "Author a safe estate exposure"
@@ -58,6 +78,26 @@ steps = [
   { feature = "feature/sim-estate/model-provider-conformance", why = "The deterministic provider proves lifecycle behavior before physical placement." },
   { feature = "feature/sim-estate/sealed-command-site", why = "The command site preserves the closed declaration at the process boundary." },
   { feature = "feature/sim-estate/ansible-provider-site", why = "The Ansible decoration adds sanitized discovery and durable typed callback evidence." },
+]
+
+[[route]]
+id = "route/plan-review-apply-estate-change"
+task = "Plan, review, and apply an estate change"
+audiences = ["code", "framework"]
+steps = [
+  { feature = "feature/sim-estate/exposure-authoring", why = "Compile a closed operation and shaped values." },
+  { feature = "feature/sim-estate/guarded-operation-lifecycle", why = "Intern the exact plan, consume review once inside the gate, lease targets, and dispatch durably." },
+  { feature = "feature/sim-estate/durable-operation-book", why = "Browse the linked event truth and rebuild projections." },
+]
+
+[[route]]
+id = "route/reconcile-quarantined-estate-run"
+task = "Reconcile or resolve a quarantined estate run"
+audiences = ["code", "framework"]
+steps = [
+  { feature = "feature/sim-estate/durable-operation-book", why = "Read the existing run and retained evidence without dispatch." },
+  { feature = "feature/sim-estate/guarded-operation-lifecycle", why = "Close, renew, release, or retain quarantine from observed artifacts; a mutation needs a new reviewed plan." },
+  { feature = "feature/sim-estate/model-provider-conformance", why = "Prove unknown-after-dispatch and reviewed resolution before using a physical site." },
 ]
 
 [enforcement.audience]
