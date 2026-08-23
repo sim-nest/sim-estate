@@ -291,16 +291,10 @@ impl<'a> AnsibleSite<'a> {
         }
         let rows: Vec<ConfigRow> = serde_json::from_str(&receipt.result.stdout)
             .map_err(|_| EstateError::MalformedEvent)?;
-        let required = [
-            "CALLBACKS_ENABLED",
-            "DEFAULT_LOAD_CALLBACK_PLUGINS",
-            "SHOW_PER_HOST_START",
-        ];
-        if required.iter().any(|name| {
-            !rows
-                .iter()
-                .any(|row| row.name == *name && row.source == "env")
-        }) {
+        if !config_list_contains(&rows, "CALLBACKS_ENABLED", "sim_estate_aggregate")
+            || !config_bool(&rows, "DEFAULT_LOAD_CALLBACK_PLUGINS", true)
+            || config_bool(&rows, "SHOW_PER_HOST_START", true)
+        {
             return Err(EstateError::MalformedEvent);
         }
         Ok(())
@@ -308,10 +302,33 @@ impl<'a> AnsibleSite<'a> {
 }
 
 #[derive(Deserialize)]
-#[serde(deny_unknown_fields)]
 struct ConfigRow {
-    name: String,
-    source: String,
+    #[serde(default)]
+    name: Option<String>,
+    #[serde(default)]
+    value: serde_json::Value,
+}
+
+fn config_value<'a>(rows: &'a [ConfigRow], name: &str) -> Option<&'a serde_json::Value> {
+    rows.iter()
+        .find(|row| row.name.as_deref() == Some(name))
+        .map(|row| &row.value)
+}
+
+fn config_list_contains(rows: &[ConfigRow], name: &str, needle: &str) -> bool {
+    match config_value(rows, name) {
+        Some(serde_json::Value::Array(values)) => values.iter().any(|value| value == needle),
+        Some(serde_json::Value::String(value)) => value == needle,
+        _ => false,
+    }
+}
+
+fn config_bool(rows: &[ConfigRow], name: &str, expected: bool) -> bool {
+    match config_value(rows, name) {
+        Some(serde_json::Value::Bool(value)) => *value == expected,
+        None => !expected,
+        _ => false,
+    }
 }
 
 impl EstateProvider for AnsibleSite<'_> {

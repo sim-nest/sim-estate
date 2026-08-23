@@ -128,9 +128,24 @@ fn callback_decoder_fails_closed_for_chain_gaps_cross_run_and_trailing_data() {
 }
 
 #[test]
+fn effective_config_accepts_current_ansible_env_rows() {
+    let rows: Vec<ConfigRow> = serde_json::from_str(
+        r#"[{"name":"CALLBACKS_ENABLED","origin":"env: ANSIBLE_CALLBACKS_ENABLED","value":["sim_estate_aggregate"]},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","origin":"env: ANSIBLE_LOAD_CALLBACK_PLUGINS","value":true},{"GALAXY_SERVERS":{}}]"#,
+    )
+    .unwrap();
+    assert!(config_list_contains(
+        &rows,
+        "CALLBACKS_ENABLED",
+        "sim_estate_aggregate"
+    ));
+    assert!(config_bool(&rows, "DEFAULT_LOAD_CALLBACK_PLUGINS", true));
+    assert!(!config_bool(&rows, "SHOW_PER_HOST_START", true));
+}
+
+#[test]
 fn reconciliation_after_controller_loss_never_redispatches() {
     let inventory = r#"{"all":{"hosts":["node"],"children":[]}}"#;
-    let config = r#"[{"name":"CALLBACKS_ENABLED","source":"env"},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","source":"env"},{"name":"SHOW_PER_HOST_START","source":"env"}]"#;
+    let config = r#"[{"name":"CALLBACKS_ENABLED","source":null,"value":["sim_estate_aggregate"]},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","source":null,"value":true}]"#;
     let port = Port {
         outcomes: Mutex::new(vec![
             completed(inventory),
@@ -234,7 +249,7 @@ fn callback_asset_is_stdlib_and_never_serializes_result_data() {
 #[test]
 fn shared_provider_conformance_runs_against_sealed_fixture() {
     let inventory = r#"{"all":{"hosts":["node"],"children":[]},"_meta":{"hostvars":{"node":{"secret":"discard"}}}}"#;
-    let config = r#"[{"name":"CALLBACKS_ENABLED","source":"env"},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","source":"env"},{"name":"SHOW_PER_HOST_START","source":"env"}]"#;
+    let config = r#"[{"name":"CALLBACKS_ENABLED","source":null,"value":["sim_estate_aggregate"]},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","source":null,"value":true}]"#;
     let port = Port {
         outcomes: Mutex::new(vec![completed(inventory), completed(config), completed("")]),
         requests: Mutex::default(),
