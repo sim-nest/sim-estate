@@ -3,6 +3,8 @@ import hashlib
 import json
 import os
 
+from ansible.plugins.callback import CallbackBase
+
 SCHEMA = 1
 _sequence = 0
 _prior = "0" * 64
@@ -29,7 +31,7 @@ def _emit(status, host=None, task=None, changed=False, terminal=False):
     _prior = record["current_hash"]
     _sequence += 1
 
-class CallbackModule:
+class CallbackModule(CallbackBase):
     CALLBACK_VERSION = 2.0
     CALLBACK_TYPE = "aggregate"
     CALLBACK_NAME = "sim_estate_aggregate"

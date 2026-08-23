@@ -212,6 +212,8 @@ fn callback_asset_is_stdlib_and_never_serializes_result_data() {
     for required in [
         "hashlib",
         "json",
+        "from ansible.plugins.callback import CallbackBase",
+        "class CallbackModule(CallbackBase):",
         "SIM_ESTATE_EVENTS",
         "CALLBACK_TYPE = \"aggregate\"",
     ] {
