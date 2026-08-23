@@ -183,6 +183,10 @@ fn bindings(args: &Args, work: &Path) -> Result<AnsibleBindings, String> {
                 PrivateArtifactRef::new("artifact/local-temp").map_err(|e| e.to_string())?,
             ),
         ),
+        (
+            "ANSIBLE_SSH_ARGS".into(),
+            BindingValue::Literal("-F none".into()),
+        ),
     ]
     .into();
     for name in ["PATH", "HOME"] {
