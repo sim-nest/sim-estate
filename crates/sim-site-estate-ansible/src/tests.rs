@@ -19,14 +19,17 @@ impl ProcessPort for Port {
     }
 }
 fn completed(stdout: &str) -> ProcessAttempt {
+    completed_status(stdout, "", 0)
+}
+fn completed_status(stdout: &str, stderr: &str, exit_code: i32) -> ProcessAttempt {
     ProcessAttempt::Completed {
         receipt: ProcessReceipt {
             provider: "model".into(),
             elapsed_mono_ns: 1,
             result: ProcResult {
                 stdout: stdout.into(),
-                stderr: "human-only".into(),
-                exit_code: 0,
+                stderr: stderr.into(),
+                exit_code,
                 truncated: false,
             },
         },
@@ -140,6 +143,42 @@ fn effective_config_accepts_current_ansible_env_rows() {
     ));
     assert!(config_bool(&rows, "DEFAULT_LOAD_CALLBACK_PLUGINS", true));
     assert!(!config_bool(&rows, "SHOW_PER_HOST_START", true));
+}
+
+#[test]
+fn non_zero_perform_attempt_fails_before_event_reconciliation() {
+    let inventory = r#"{"all":{"hosts":["node"],"children":[]}}"#;
+    let config = r#"[{"name":"CALLBACKS_ENABLED","source":null,"value":["sim_estate_aggregate"]},{"name":"DEFAULT_LOAD_CALLBACK_PLUGINS","source":null,"value":true}]"#;
+    let port = Port {
+        outcomes: Mutex::new(vec![
+            completed(inventory),
+            completed(config),
+            completed_status("", "private transport failed", 2),
+        ]),
+        requests: Mutex::default(),
+    };
+    let artifacts = Artifacts(Mutex::default());
+    let mut site = AnsibleSite::new(&port, &artifacts, bindings());
+    let (_, inventory) = site.discover().unwrap();
+    let operation = Operation {
+        version: 1,
+        exposure: sym("deploy/perform"),
+        target: inventory.targets[0].id.clone(),
+        parameters: BTreeMap::new(),
+        mode: sim_estate_core::OperationMode::Change,
+    };
+    let project = ProjectFingerprint::of(b"fixture");
+    let plan = site.plan(operation, project.clone()).unwrap();
+    let approval = Approval {
+        version: 1,
+        plan: plan.id.clone(),
+        project,
+        granted: true,
+    };
+    assert_eq!(
+        site.perform(&plan, &approval).unwrap_err(),
+        EstateError::MalformedEvent
+    );
 }
 
 #[test]

@@ -437,8 +437,16 @@ impl EstateProvider for AnsibleSite<'_> {
         let request = self.operation_request(argv, &run_id, &plan.id)?;
         self.dispatches += 1;
         let attempt = self.port.run(&request, &ProcessCancellation::default());
-        if matches!(attempt, ProcessAttempt::NotDispatched { .. }) {
-            return Err(EstateError::NotDispatched);
+        match attempt {
+            ProcessAttempt::NotDispatched { .. } => return Err(EstateError::NotDispatched),
+            ProcessAttempt::Completed { receipt }
+                if receipt.result.truncated || receipt.result.exit_code != 0 =>
+            {
+                return Err(EstateError::MalformedEvent);
+            }
+            ProcessAttempt::StoppedAfterTimeout { .. }
+            | ProcessAttempt::StoppedAfterCancel { .. } => return Err(EstateError::MalformedEvent),
+            ProcessAttempt::Completed { .. } | ProcessAttempt::UnknownAfterDispatch { .. } => {}
         }
         self.runs.insert(run_id.clone(), plan.id.clone());
         Ok(Run {
