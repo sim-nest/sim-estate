@@ -1,0 +1,24 @@
+{
+  "schema": "sim.card-index.v1",
+  "cards": [
+    "recipes/ansible-controller-loss/main.siml",
+    "recipes/ansible-controller-loss/purpose.md",
+    "recipes/ansible-controller-loss/recipe.toml",
+    "recipes/book.toml",
+    "recipes/model-rollout/main.siml",
+    "recipes/model-rollout/purpose.md",
+    "recipes/model-rollout/recipe.toml",
+    "recipes/observe-history/main.siml",
+    "recipes/observe-history/purpose.md",
+    "recipes/observe-history/recipe.toml",
+    "recipes/reconcile-unknown/main.siml",
+    "recipes/reconcile-unknown/purpose.md",
+    "recipes/reconcile-unknown/recipe.toml",
+    "recipes/resolve-quarantine/main.siml",
+    "recipes/resolve-quarantine/purpose.md",
+    "recipes/resolve-quarantine/recipe.toml",
+    "recipes/reviewed-model-change/main.siml",
+    "recipes/reviewed-model-change/purpose.md",
+    "recipes/reviewed-model-change/recipe.toml"
+  ]
+}
