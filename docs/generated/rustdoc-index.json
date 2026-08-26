@@ -1,0 +1,75 @@
+{
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "crate_name": "sim-estate-acceptance",
+      "group": "workspace",
+      "manifest": "acceptance/controller-driver/Cargo.toml",
+      "package": "sim-estate-acceptance",
+      "summary": "SIM workspace package for sim estate acceptance."
+    },
+    {
+      "crate_name": "sim_estate_core",
+      "group": "workspace",
+      "manifest": "crates/sim-estate-core/Cargo.toml",
+      "package": "sim-estate-core",
+      "summary": "Portable estate records and the provider contract."
+    },
+    {
+      "crate_name": "sim_estate_project",
+      "group": "workspace",
+      "manifest": "crates/sim-estate-project/Cargo.toml",
+      "package": "sim-estate-project",
+      "summary": "Strict, pure exposure compilation."
+    },
+    {
+      "crate_name": "sim_lib_estate",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-estate/Cargo.toml",
+      "package": "sim-lib-estate",
+      "summary": "Guarded, durable estate plan/apply/reconcile composition."
+    },
+    {
+      "crate_name": "sim_lib_estate_book",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-estate-book/Cargo.toml",
+      "package": "sim-lib-estate-book",
+      "summary": "Immutable, hash-linked estate history over a minimal Table/Dir CAS contract."
+    },
+    {
+      "crate_name": "sim_lib_estate_serve",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-estate-serve/Cargo.toml",
+      "package": "sim-lib-estate-serve",
+      "summary": "One read-only estate directory and the typed calls accepted by its organ."
+    },
+    {
+      "crate_name": "sim_site_estate_ansible",
+      "group": "workspace",
+      "manifest": "crates/sim-site-estate-ansible/Cargo.toml",
+      "package": "sim-site-estate-ansible",
+      "summary": "Ansible as a sealed decoration over the canonical process port."
+    },
+    {
+      "crate_name": "sim_site_estate_command",
+      "group": "workspace",
+      "manifest": "crates/sim-site-estate-command/Cargo.toml",
+      "package": "sim-site-estate-command",
+      "summary": "Pure compilation of closed estate operations into sealed process requests."
+    },
+    {
+      "crate_name": "sim_site_estate_model",
+      "group": "workspace",
+      "manifest": "crates/sim-site-estate-model/Cargo.toml",
+      "package": "sim-site-estate-model",
+      "summary": "Deterministic estate provider site."
+    },
+    {
+      "crate_name": "xtask",
+      "group": "workspace",
+      "manifest": "xtask/Cargo.toml",
+      "package": "xtask",
+      "summary": "SIM workspace package for xtask."
+    }
+  ]
+}

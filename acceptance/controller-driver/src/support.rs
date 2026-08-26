@@ -129,7 +129,7 @@ impl ProcessPort for NativePort {
         };
         let started = Instant::now();
         let output = Command::new(program)
-            .args(request.argv.iter().map(|arg| arg.as_str()))
+            .args(request.argv.iter().map(sim_lib_exec::ArgAtom::as_str))
             .current_dir(root)
             .env_clear()
             .envs(env.iter())
@@ -170,7 +170,7 @@ impl NativePort {
                 &request
                     .argv
                     .iter()
-                    .map(|arg| arg.as_str())
+                    .map(sim_lib_exec::ArgAtom::as_str)
                     .collect::<Vec<_>>(),
             )
             .unwrap_or_default(),

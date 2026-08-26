@@ -1,0 +1,55 @@
+{
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-estate-acceptance"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-estate-core"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-estate-project"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-estate"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-estate-book"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-estate-serve"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-site-estate-ansible"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-site-estate-command"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-site-estate-model"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "xtask"
+    }
+  ]
+}

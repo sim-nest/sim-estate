@@ -1,0 +1,24 @@
+{
+  "card_count": 3,
+  "cards": [
+    {
+      "id": "browse/catalog",
+      "kind": "browse-root",
+      "owner": "workspace",
+      "summary": "root browse catalog"
+    },
+    {
+      "id": "cookbook/sim-estate",
+      "kind": "cookbook-recipe",
+      "owner": "sim-estate",
+      "summary": "Runnable recipes for modeled and sealed physical estate providers."
+    },
+    {
+      "id": "registry/catalog",
+      "kind": "browse-registry",
+      "owner": "workspace",
+      "summary": "registry catalog browse card"
+    }
+  ],
+  "generator": "xtask repo-contract v1"
+}

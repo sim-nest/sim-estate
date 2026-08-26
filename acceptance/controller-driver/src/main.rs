@@ -14,6 +14,7 @@ use sim_site_estate_ansible::{AnsibleBindings, AnsibleSite, CALLBACK_PY, Operati
 use sim_site_estate_model::{Fault, ModelEstate};
 use std::{
     collections::BTreeMap,
+    fmt::Write as _,
     fs,
     path::{Path, PathBuf},
 };
@@ -389,9 +390,11 @@ fn write_artifact(path: &Path, facts: &Facts) -> Result<(), String> {
         ("private-boundary", "evidence/sanitized"),
         ("offline-verifier", "artifact/verify"),
     ] {
-        out.push_str(&format!(
-            "    (case (id \"{id}\") (category \"{category}\") (passed true))\n"
-        ));
+        writeln!(
+            out,
+            "    (case (id \"{id}\") (category \"{category}\") (passed true))"
+        )
+        .map_err(|_| "cannot format acceptance case".to_owned())?;
     }
     out.push_str("  )\n");
     field(&mut out, "result", "physical-controller-readonly-pass")?;
@@ -404,6 +407,7 @@ fn field(out: &mut String, name: &str, value: &str) -> Result<(), String> {
     if value.contains(['"', '\\']) {
         return Err(format!("{name} contains an unsafe character"));
     }
-    out.push_str(&format!("  ({name} \"{value}\")\n"));
+    writeln!(out, "  ({name} \"{value}\")")
+        .map_err(|_| "cannot format acceptance field".to_owned())?;
     Ok(())
 }
