@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! Strict, pure exposure compilation.
+// conformance: exposure compilation admits only closed shaped operations.
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};

@@ -1,3 +1,5 @@
+// conformance: reviewed estate plans dispatch once and quarantine ambiguous outcomes.
+
 use super::*;
 use sim_lib_estate_book::MemoryTable;
 use sim_site_estate_model::{Fault, ModelEstate};

@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! Deterministic estate provider site.
+// conformance: the model provider exercises every dispatch and verification boundary.
 
 use sim_estate_core::{
     Approval, EstateError, EstateProvider, Event, EventKind, Operation, Outcome, Plan, Preview,

@@ -1,3 +1,5 @@
+// conformance: Ansible discovery and callback evidence remain typed and sanitized.
+
 use super::*;
 use sim_lib_exec::{ProcResult, ProcessReceipt};
 use std::sync::Mutex;

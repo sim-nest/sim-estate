@@ -435,5 +435,7 @@ fn parse_state(s: &str) -> RunState {
 }
 
 #[cfg(test)]
+mod controller_acceptance_tests;
+#[cfg(test)]
 #[allow(clippy::many_single_char_names)]
 mod tests;

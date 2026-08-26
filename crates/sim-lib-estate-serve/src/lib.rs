@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! One read-only estate directory and the typed calls accepted by its organ.
+// conformance: estate projections are read-only and calls remain capability-shaped.
 
 use serde::{Deserialize, Serialize};
 use sim_lib_estate::{ImmutablePlan, Planned};

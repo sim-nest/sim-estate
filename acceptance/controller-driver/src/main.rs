@@ -1,3 +1,5 @@
+// conformance: model refusal and controller-loss cases preserve the estate dispatch boundary.
+
 mod support;
 
 use crate::support::{
@@ -410,4 +412,20 @@ fn field(out: &mut String, name: &str, value: &str) -> Result<(), String> {
     writeln!(out, "  ({name} \"{value}\")")
         .map_err(|_| "cannot format acceptance field".to_owned())?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn model_cases_distinguish_safe_retry_from_quarantine() {
+        let refusal = model_not_dispatched().unwrap();
+        assert!(refusal.retryable);
+        assert!(refusal.state.contains("not dispatched"));
+
+        let controller_loss = model_controller_loss().unwrap();
+        assert!(!controller_loss.retryable);
+        assert_eq!(controller_loss.state, "Quarantined");
+    }
 }

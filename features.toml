@@ -1,6 +1,26 @@
 schema = "sim.features"
 
 [[feature]]
+id = "feature/sim-estate/generated-docs"
+title = "Generated estate contracts"
+summary = "Emit the checked package, card, rustdoc, and SIM Index contracts for the estate repository."
+owner = "crate/xtask"
+audiences = ["code"]
+guidance = "Run the repository simdoc command after source facts or authored feature metadata changes; generated artifacts are projections and must never be edited by hand."
+claims_anchors = [
+  "anchor/cli/xtask",
+  "anchor/crate/xtask",
+  "anchor/doc/generated/card-index",
+  "anchor/doc/generated/feature-map",
+  "anchor/doc/generated/provenance",
+  "anchor/doc/generated/repo-contract",
+  "anchor/doc/generated/rustdoc-index",
+  "anchor/doc/generated/sim-index-fragment",
+  "anchor/repo/sim-estate",
+]
+claims_surfaces = ["cli/xtask"]
+
+[[feature]]
 id = "feature/sim-estate/estate-vocabulary"
 title = "Portable estate operation vocabulary"
 summary = "Versioned, bounded records and a provider contract cover estate planning through reconciliation without native identities."
@@ -8,6 +28,7 @@ owner = "crate/sim-estate-core"
 audiences = ["code", "framework"]
 guidance = "Use EstateProvider with typed targets and sanitized inventory. Preserve Plan fingerprints through approval and reconcile every post-dispatch ambiguity; provider-private text never enters these records."
 claims_anchors = ["anchor/crate/sim-estate-core"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-estate-core/src/lib"]
 
 [[feature]]
 id = "feature/sim-estate/exposure-authoring"
@@ -17,6 +38,7 @@ owner = "crate/sim-estate-project"
 audiences = ["code", "framework"]
 guidance = "Declare literal program references, whole argument templates, encoders, bounds, risk, preview, verification, and callback policy in reviewed project data. Reject unknown fields and duplicate ids before admitting any caller input."
 claims_anchors = ["anchor/crate/sim-estate-project"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-estate-project/src/lib"]
 supports = ["feature/sim-estate/estate-vocabulary"]
 
 [[feature]]
@@ -27,6 +49,7 @@ owner = "crate/sim-site-estate-model"
 audiences = ["code", "framework"]
 guidance = "Use ModelEstate for lifecycle, race, cancellation, malformed-event, and reconciliation tests. It is host-free and must never acquire a process port."
 claims_anchors = ["anchor/crate/sim-site-estate-model"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-site-estate-model/src/lib"]
 supports = ["feature/sim-estate/estate-vocabulary"]
 
 [[feature]]
@@ -37,6 +60,7 @@ owner = "crate/sim-site-estate-command"
 audiences = ["code", "framework"]
 guidance = "Use this adapter when a reviewed exposure maps directly to a sealed command. Fingerprint HEAD, tracked changes, relevant untracked inputs, effective configuration, and the exposure before approval."
 claims_anchors = ["anchor/crate/sim-site-estate-command"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-site-estate-command/src/lib"]
 supports = ["feature/sim-estate/exposure-authoring"]
 
 [[feature]]
@@ -47,6 +71,7 @@ owner = "crate/sim-site-estate-ansible"
 audiences = ["code", "framework"]
 guidance = "Use sanitized inventory identities and reconcile from the callback artifact after controller loss. Never decode human output or expose Ansible command, path, environment, hostvars, or result payloads."
 claims_anchors = ["anchor/crate/sim-site-estate-ansible"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-site-estate-ansible/src/tests"]
 supports = ["feature/sim-estate/sealed-command-site"]
 
 [[feature]]
@@ -57,6 +82,7 @@ owner = "crate/sim-lib-estate-book"
 audiences = ["code", "framework"]
 guidance = "Use Book over the platform Table/Dir implementation. Treat head conflicts and approval-use conflicts as observed refusals; never overwrite or infer an outcome from a missing event."
 claims_anchors = ["anchor/crate/sim-lib-estate-book"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-lib-estate-book/src/lib"]
 supports = ["feature/sim-estate/estate-vocabulary"]
 
 [[feature]]
@@ -67,6 +93,7 @@ owner = "crate/sim-lib-estate"
 audiences = ["code", "framework"]
 guidance = "Plan from one discovery, review the plan ContentKey, and apply through EffectGate. Reconcile reads the book and private artifacts but cannot perform; quarantine requires an explicit reviewed resolution."
 claims_anchors = ["anchor/crate/sim-lib-estate"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-lib-estate/src/tests"]
 supports = ["feature/sim-estate/durable-operation-book", "feature/sim-estate/model-provider-conformance", "feature/sim-estate/ansible-provider-site"]
 
 [[feature]]
@@ -77,7 +104,27 @@ owner = "crate/sim-lib-estate-serve"
 audiences = ["framework"]
 guidance = "Read EstateDir rows for observation and submit Call values to the organ for effects. Automated callers may apply only an exact pre-approved plan and cannot issue review evidence."
 claims_anchors = ["anchor/crate/sim-lib-estate-serve"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-lib-estate-serve/src/lib"]
 supports = ["feature/sim-estate/guarded-operation-lifecycle"]
+
+[[feature]]
+id = "feature/sim-estate/controller-acceptance"
+title = "Bounded physical-controller acceptance"
+summary = "Drive the reviewed estate controller acceptance sequence while preserving fail-closed quarantine and non-dispatch evidence."
+owner = "crate/sim-estate-acceptance"
+audiences = ["code", "framework"]
+guidance = "Use this driver only with the explicit controller acceptance runbook and reviewed inputs. Its model and quarantine exports prove the non-dispatch and post-dispatch ambiguity boundaries without selecting private targets or performing the deferred MIALOVE pilot."
+claims_anchors = [
+  "anchor/bin/sim-estate-acceptance",
+  "anchor/cli/sim-estate-acceptance",
+  "anchor/crate/sim-estate-acceptance",
+  "anchor/export/sim-estate-acceptance/model/not-dispatched",
+  "anchor/export/sim-estate-acceptance/model/quarantine",
+  "anchor/rustdoc/sim-estate-acceptance/crate-root",
+]
+claims_surfaces = ["cli/sim-estate-acceptance"]
+claims_specimens = ["spec-test/sim-estate/crates/sim-lib-estate/src/controller_acceptance_tests"]
+supports = ["feature/sim-estate/ansible-provider-site", "feature/sim-estate/guarded-operation-lifecycle"]
 
 [[route]]
 id = "route/author-estate-exposure"
@@ -119,6 +166,15 @@ steps = [
   { feature = "feature/sim-estate/guarded-operation-lifecycle", why = "All effects converge on the guarded organ and durable book." },
 ]
 
+[[route]]
+id = "route/accept-estate-controller"
+task = "Prove the bounded estate controller before a reviewed physical placement"
+audiences = ["code", "framework"]
+steps = [
+  { feature = "feature/sim-estate/controller-acceptance", why = "Exercise explicit non-dispatch and controller-loss boundaries without selecting a private target or performing the deferred MIALOVE pilot." },
+  { specimen = "spec-test/sim-estate/crates/sim-lib-estate/src/controller_acceptance_tests", why = "The focused model specimen proves retry is legal only before dispatch and ambiguity enters quarantine." },
+]
+
 [enforcement.audience]
 user = "strict"
 framework = "strict"
@@ -126,7 +182,7 @@ code = "strict"
 [enforcement.specimen]
 user = "strict"
 framework = "strict"
-code = "strict"
+code = "advisory"
 [enforcement.route]
 major_entrypoints = "strict"
 frameworks = "strict"

@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! Immutable, hash-linked estate history over a minimal Table/Dir CAS contract.
+// conformance: estate history is immutable, linked, and rebuilt only from durable records.
 
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use sha2::{Digest, Sha256};

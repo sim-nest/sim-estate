@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! Portable estate records and the provider contract.
+// conformance: portable estate records preserve bounded provider lifecycle semantics.
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};

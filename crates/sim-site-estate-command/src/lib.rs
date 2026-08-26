@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 //! Pure compilation of closed estate operations into sealed process requests.
+// conformance: command requests contain only reviewed programs, roots, atoms, and budgets.
 
 use sha2::{Digest, Sha256};
 use sim_estate_core::{Operation, ProjectFingerprint, Symbol};
