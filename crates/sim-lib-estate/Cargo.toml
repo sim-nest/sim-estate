@@ -12,11 +12,11 @@ serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
 thiserror.workspace = true
-sim-estate-core = { path = "../sim-estate-core" }
+sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
 sim-lib-estate-book = { version = "0.1.0", path = "../sim-lib-estate-book" }
 
 [dev-dependencies]
-sim-site-estate-model = { path = "../sim-site-estate-model" }
+sim-site-estate-model = { version = "0.1.0", path = "../sim-site-estate-model" }
 
 [lints]
 workspace = true
