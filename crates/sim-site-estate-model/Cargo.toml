@@ -6,7 +6,7 @@ license = "MPL-2.0"
 description = "Deterministic host-free model site for SIM estate providers."
 repository = "https://github.com/sim-nest/sim-estate"
 readme = "README.md"
-publish = false
+publish = true
 sim-pure = true
 [dependencies]
 sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
@@ -14,4 +14,3 @@ sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
 sim-estate-project = { version = "0.1.0", path = "../sim-estate-project" }
 [lints]
 workspace = true
-
