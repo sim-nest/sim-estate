@@ -1,4 +1,4 @@
-use super::*;
+use super::{DecodedEvents, decode_events};
 
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
