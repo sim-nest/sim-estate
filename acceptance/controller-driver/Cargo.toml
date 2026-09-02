@@ -2,6 +2,8 @@
 name = "sim-estate-acceptance"
 version = "0.0.0"
 edition = "2024"
+description = "SIM workspace package for sim estate acceptance."
+readme = "README.md"
 publish = false
 sim-pure = false
 

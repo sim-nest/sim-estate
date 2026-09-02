@@ -1,0 +1,128 @@
+{
+  "generator": "xtask crate-catalog v1",
+  "package_count": 10,
+  "packages": [
+    {
+      "description": "SIM workspace package for sim estate acceptance.",
+      "generated_readme": true,
+      "manifest": "acceptance/controller-driver/Cargo.toml",
+      "name": "sim-estate-acceptance",
+      "publish": "false",
+      "readme": "acceptance/controller-driver/README.md",
+      "root": "acceptance/controller-driver",
+      "target_kinds": [
+        "bin",
+        "test"
+      ]
+    },
+    {
+      "description": "Pure portable estate records and provider contract for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-estate-core/Cargo.toml",
+      "name": "sim-estate-core",
+      "publish": "true",
+      "readme": "crates/sim-estate-core/README.md",
+      "root": "crates/sim-estate-core",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Pure closed exposure compiler for SIM estate operations.",
+      "generated_readme": false,
+      "manifest": "crates/sim-estate-project/Cargo.toml",
+      "name": "sim-estate-project",
+      "publish": "true",
+      "readme": "crates/sim-estate-project/README.md",
+      "root": "crates/sim-estate-project",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "CAS-backed durable history for SIM estate operations.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-estate-book/Cargo.toml",
+      "name": "sim-lib-estate-book",
+      "publish": "true",
+      "readme": "crates/sim-lib-estate-book/README.md",
+      "root": "crates/sim-lib-estate-book",
+      "target_kinds": [
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Read-only estate Dir projection and capability-shaped organ calls.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-estate-serve/Cargo.toml",
+      "name": "sim-lib-estate-serve",
+      "publish": "true",
+      "readme": "crates/sim-lib-estate-serve/README.md",
+      "root": "crates/sim-lib-estate-serve",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Guarded plan/apply/reconcile organ for SIM estates.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-estate/Cargo.toml",
+      "name": "sim-lib-estate",
+      "publish": "true",
+      "readme": "crates/sim-lib-estate/README.md",
+      "root": "crates/sim-lib-estate",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Sealed Ansible provider site for SIM estate.",
+      "generated_readme": false,
+      "manifest": "crates/sim-site-estate-ansible/Cargo.toml",
+      "name": "sim-site-estate-ansible",
+      "publish": "false",
+      "readme": "crates/sim-site-estate-ansible/README.md",
+      "root": "crates/sim-site-estate-ansible",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Sealed ProcessPort adapter for compiled SIM estate operations.",
+      "generated_readme": false,
+      "manifest": "crates/sim-site-estate-command/Cargo.toml",
+      "name": "sim-site-estate-command",
+      "publish": "false",
+      "readme": "crates/sim-site-estate-command/README.md",
+      "root": "crates/sim-site-estate-command",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "Deterministic host-free model site for SIM estate providers.",
+      "generated_readme": false,
+      "manifest": "crates/sim-site-estate-model/Cargo.toml",
+      "name": "sim-site-estate-model",
+      "publish": "true",
+      "readme": "crates/sim-site-estate-model/README.md",
+      "root": "crates/sim-site-estate-model",
+      "target_kinds": [
+        "lib"
+      ]
+    },
+    {
+      "description": "SIM workspace package for xtask.",
+      "generated_readme": true,
+      "manifest": "xtask/Cargo.toml",
+      "name": "xtask",
+      "publish": "false",
+      "readme": "xtask/README.md",
+      "root": "xtask",
+      "target_kinds": [
+        "bin"
+      ]
+    }
+  ]
+}

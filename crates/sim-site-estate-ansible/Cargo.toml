@@ -3,6 +3,7 @@ name = "sim-site-estate-ansible"
 version = "0.1.0"
 edition = "2024"
 license = "MPL-2.0"
+readme = "README.md"
 description = "Sealed Ansible provider site for SIM estate."
 repository.workspace = true
 homepage.workspace = true
