@@ -149,6 +149,8 @@ dependencies = [
 [[package]]
 name = "sim-config"
 version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bb33f2aab996b8fc52e5c3a112278cd027852883cc4c38bf128f4d109e2a5157"
 dependencies = [
  "sim-kernel",
  "sim-table-core",
@@ -158,6 +160,8 @@ dependencies = [
 [[package]]
 name = "sim-cookbook"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75f82f8dadd451703aa40ab91189a59e797f642901b67adc625d4e614570020b"
 dependencies = [
  "sim-config",
  "sim-kernel",
@@ -167,6 +171,8 @@ dependencies = [
 [[package]]
 name = "sim-cookbook-build"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff29fee45cd1e6bfc0834e5ac081404023d8ed5b4a63c6154541ce054c86c824"
 dependencies = [
  "sim-cookbook",
 ]
@@ -190,7 +196,7 @@ dependencies = [
 
 [[package]]
 name = "sim-estate-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -200,7 +206,7 @@ dependencies = [
 
 [[package]]
 name = "sim-estate-project"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serde",
  "serde_json",
@@ -212,13 +218,15 @@ dependencies = [
 [[package]]
 name = "sim-kernel"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8616e5bbe1c7bf28e31fd07bf0b6ff519d3c12d78551c1e9ecffc028e916c07f"
 dependencies = [
  "thiserror 1.0.69",
 ]
 
 [[package]]
 name = "sim-lib-estate"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -231,7 +239,7 @@ dependencies = [
 
 [[package]]
 name = "sim-lib-estate-book"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -241,7 +249,7 @@ dependencies = [
 
 [[package]]
 name = "sim-lib-estate-serve"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -254,6 +262,8 @@ dependencies = [
 [[package]]
 name = "sim-lib-exec"
 version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82a962410b5beb536667d942ddb0173274094d0055f0ef3dc0e441696fc5136e"
 dependencies = [
  "sim-cookbook",
  "sim-cookbook-build",
@@ -286,7 +296,7 @@ dependencies = [
 
 [[package]]
 name = "sim-site-estate-model"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "sim-estate-core",
  "sim-estate-project",
@@ -295,6 +305,8 @@ dependencies = [
 [[package]]
 name = "sim-table-core"
 version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc20a5eeb3e91cd71c6fcb41d764c6ac10730e42fce417cdf9e8fdcb171d421e"
 dependencies = [
  "sim-kernel",
  "sim-value",
@@ -303,6 +315,8 @@ dependencies = [
 [[package]]
 name = "sim-value"
 version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e840685606b848a663a8be15e3e7c2bf88d0d30f2b1e20b110cd59521f44218d"
 dependencies = [
  "sim-kernel",
 ]

@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-estate-serve"
-version = "0.1.0"
+version = "0.2.0"
 edition.workspace = true
 license.workspace = true
 readme = "README.md"
@@ -13,9 +13,9 @@ sim-pure = true
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
-sim-lib-estate = { version = "0.1.0", path = "../sim-lib-estate" }
-sim-lib-estate-book = { version = "0.1.0", path = "../sim-lib-estate-book" }
+sim-estate-core = { version = "0.2.0", path = "../sim-estate-core" }
+sim-lib-estate = { version = "0.2.0", path = "../sim-lib-estate" }
+sim-lib-estate-book = { version = "0.2.0", path = "../sim-lib-estate-book" }
 thiserror = "2"
 
 [lints]

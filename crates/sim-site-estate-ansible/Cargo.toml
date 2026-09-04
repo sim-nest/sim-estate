@@ -15,7 +15,7 @@ serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
 thiserror.workspace = true
-sim-estate-core = { version = "0.1.0", path = "../sim-estate-core" }
+sim-estate-core = { version = "0.2.0", path = "../sim-estate-core" }
 sim-estate-project = { version = "0.1.0", path = "../sim-estate-project" }
 sim-lib-exec.workspace = true
 
