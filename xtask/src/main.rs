@@ -1,4 +1,11 @@
+// SPDX-License-Identifier: MPL-2.0
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 #![forbid(unsafe_code)]
+
+mod simdoc;
 
 use std::{fs, path::Path, process::Command};
 
@@ -89,7 +96,8 @@ fn run(name: &str, args: &[&str]) -> Result<(), String> {
 
 fn main() {
     let result = match std::env::args().nth(1).as_deref() {
-        Some("os5" | "check-file-sizes" | "simdoc") => contract(),
+        Some("os5" | "check-file-sizes") => contract(),
+        Some("simdoc") => simdoc::run(&std::env::args().collect::<Vec<_>>()),
         Some("check") => contract()
             .and_then(|()| run("cargo", &["fmt", "--all", "--check"]))
             .and_then(|()| run("cargo", &["test", "--workspace"]))
